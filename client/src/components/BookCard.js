@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import ListNames from './ListNames'
+// import ListNames from './ListNames'
+import BookListForBook from './BookListForBook'
 import {addBookToList} from '../helpers/booktonica-api-fetcher'
 import {
   Col,
@@ -9,8 +10,6 @@ import {
   CardBody,
   CardTitle,
   CardSubtitle,
-  Button,
-  Badge,
   ButtonDropdown, 
   DropdownItem, 
   DropdownMenu, 
@@ -25,7 +24,7 @@ import {
 class BookCard extends Component {
   state = {
     booklist: null,
-    dropDownOpen: '',
+    dropDownOpen: false,
   };
 
   toggle = () => {
@@ -42,16 +41,6 @@ class BookCard extends Component {
     return addBookToList(addBook).then(() => window.location.reload())
   }
 
-  // handleValueChange = (e) => {
-  //    this.setState({value: e.target.value})
-  //    let bookId = parseInt(e.target.value[0])
-  //    let bookListId = parseInt(e.target.value[1])
-  //    let book = {bookId: bookId, bookListId: bookListId}
-  //      return addBookToList(book).then(savedBook => {
-  //        this.setState({ booklist: this.state.booklist(savedBook) });
-  //      });
-  //    };
-
   render() {
     let {
       book_id,
@@ -60,10 +49,9 @@ class BookCard extends Component {
       title,
       author_name,
       publication_date,
-      list_id,
       listnames 
     } = this.props.book;
-    // console.log(this.props.book)
+    // console.log('bookCard.js:', listnames)
     const {showBooklist, booklists} = this.props;
     return (
       <Col xs="4">
@@ -78,31 +66,23 @@ class BookCard extends Component {
             <CardSubtitle>{author_name}</CardSubtitle>
             <CardSubtitle> 
               book_lists: 
-              {listnames.map(list => {
-                return (
-                  <ListNames list={list} showBooklist={showBooklist} />
-                 
-                )
-              })}
+              <BookListForBook book_id={book_id} showBooklist={showBooklist} />
             </CardSubtitle>
-            <CardText>
               <i>{publication_date}</i> - {summary} <br/> 
               <ButtonDropdown >
                 <Dropdown isOpen={this.state.dropDownOpen} toggle={this.toggle} >
-                  <DropdownToggle color="primary" caret className="dropdown-toggle">
+                  <DropdownToggle color="info" caret className="dropdown-toggle">
                       Add book To a Book List
                   </DropdownToggle>
                     <DropdownMenu className="bookList">
-                      {booklists.map(list => {
+                      {booklists.map((list, i) => {
                         return (
-                            <DropdownItem onClick={this.select} value={[list.list_id, book_id]}>{list.list_name}</DropdownItem>   
+                            <DropdownItem key={i} onClick={this.select} value={[list.list_id, book_id]}>{list.list_name}</DropdownItem>   
                         )
                       })}
                     </DropdownMenu>
                 </Dropdown>
               </ButtonDropdown>  
-                
-            </CardText>
           </CardBody>
         </Card>
       </Col>

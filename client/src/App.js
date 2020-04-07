@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { getAllBooks, getBookList, addBookToList } from "./helpers/booktonica-api-fetcher";
+import { getAllBooks, getBookList, getBooksInList} from "./helpers/booktonica-api-fetcher";
 import BookCardList from './components/BookCardList';
 import Booklists from './components/Booklists';
 import Header from './components/Header';
@@ -19,30 +19,27 @@ class App extends Component {
   
   componentDidMount() {
     getAllBooks().then(books => {
-      //removes/reduces the duplicate books that belong to many list
-      books = Object.values(books.reduce((booklist, book) =>{
-        let key = book.book_id
-        let listName = book.list_name;
-        let listId = book.list_id
-        if(key in booklist){
-            booklist[key]['listnames'].push({listName: listName, listId: listId})
-        } else {
-            book['listnames'] = [{listName: listName, listId: listId}]
-            booklist[book.book_id] = book
-        }
-        return booklist
-      }, {}));
-    // console.log(books)
-    this.setState({ books: books })
+      this.setState({ books: books })
     });
     getBookList().then(lists => this.setState({ booklists: lists }));
   }
 
   selectBookList = (list_id, name) => {
-    // console.log('selected book list', id)
-    this.setState({
-      selectedBookList: list_id,
-      booklistName: name
+    console.log('app.js selected book list', list_id, this.state.books)
+    if(list_id === null){
+      getAllBooks().then(books => {
+        this.setState({ 
+          books: books,
+          selectedBookList: list_id 
+        })
+      });
+    }
+    getBooksInList(list_id).then(books =>{  
+      this.setState({
+        selectedBookList: list_id,
+        booklistName: name,
+        books: books
+      })
     })
   }
   render() {
@@ -51,7 +48,7 @@ class App extends Component {
       <div className="App">
         <Booklists booklists={this.state.booklists} showBooklist={this.selectBookList} />
         <Header booklist={this.state.selectedBookList !== null ? this.state.booklistName : this.state.books.length} />
-        <BookCardList books={this.state.books} booklists={this.state.booklists} selectedBookList={this.state.selectedBookList} showBooklist={this.selectBookList}/>
+        <BookCardList books={this.state.books} booklists={this.state.booklists} selectedBookList={this.state.selectedBookList} showBooklist={this.selectBookList.bind(this)}/>
       </div>
     );
   }

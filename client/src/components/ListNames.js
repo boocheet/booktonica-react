@@ -2,11 +2,12 @@ import React from 'react';
 import { Badge, Button } from 'reactstrap';
 
  const ListNames = (props) => {
-  const {listName, listId} = props.list
+  const {list_name, list_id} = props.list
+  // console.log('listNames', props)
   return (
     <div>
-      <Button  onClick={ () => props.showBooklist(listId, listName)}>
-        <Badge color="light">{listName} Book List</Badge>
+      <Button outline color='info' onClick={ () => props.showBooklist(list_id, list_name)}>
+        {list_name} Book List
       </Button>
     </div>
   );
