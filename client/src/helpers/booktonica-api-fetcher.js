@@ -1,3 +1,5 @@
+const apiUrl = process.env.REACT_APP_BOOKTONICA_API || 'http://localHost3001'; 
+console.log(apiUrl)
 export function getAllBooks() {
   return fetch(`${apiUrl}/books`, {
     headers: {
@@ -48,7 +50,7 @@ export function getAllBooksInList(){
     }
   });
 }
-const apiUrl = process.env.REACT_APP_BOOKTONICA_API 
+
 export function addBookToList(book) {
   return fetch(`${apiUrl}/booklist_books`, {
     method: "POST",
@@ -61,7 +63,7 @@ export function addBookToList(book) {
 }
 
 export function getListBooksBelongTo(id){
-  return fetch(`${apiUrl}${apiUrl}/listsBookBelongsTo/${id}`, {
+  return fetch(`${apiUrl}/listsBookBelongsTo/${id}`, {
     headers: {
       // This header is needed or React app won't proxy it along to Express
       Accept: "application/json"
