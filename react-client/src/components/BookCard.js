@@ -51,7 +51,7 @@ class BookCard extends Component {
       publication_date,
       listnames 
     } = this.props.book;
-    // console.log('bookCard.js:', listnames)
+    console.log('bookCard.js:', booklists)
     const {showBooklist, booklists} = this.props;
     return (
       <Col xs="4">

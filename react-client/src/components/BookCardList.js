@@ -6,7 +6,7 @@ import {getBooksInList} from "../helpers/booktonica-api-fetcher"
 class BookCardList extends Component {
   componentDidMount(){
     console.log('bookCardlist.js props:', this.props)
-    // getBooksInList()
+    getBooksInList()
   }
   render() {
     const { books,  selectedBookList, showBooklist, booklists} = this.props;
